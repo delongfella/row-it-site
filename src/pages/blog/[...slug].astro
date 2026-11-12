@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { services } from '../../data/services';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1], all: posts },
+  }));
+}
+
+const { post, newer, older, all } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const words = (post.body ?? '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 220));
+
+const relatedServices = services.filter((s) => s.related.includes(post.id));
+const morePosts = all.filter((p) => p.id !== post.id).slice(0, 3);
+
+const url = new URL(`/blog/${post.id}/`, Astro.site).href;
+const image = post.data.image ? new URL(post.data.image, Astro.site).href : new URL('/images/about-rohit.png', Astro.site).href;
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.data.title,
+    description: post.data.excerpt,
+    datePublished: post.data.date.toISOString(),
+    dateModified: post.data.date.toISOString(),
+    image,
+    mainEntityOfPage: url,
+    author: { '@id': new URL('/#rohit', Astro.site).href },
+    publisher: { '@id': new URL('/#rohit', Astro.site).href },
+  },
+];
+const seoTitle = post.data.title.length <= 40 ? `${post.data.title} | Rohit Kumar` : post.data.title;
+---
+<Base
+  title={seoTitle}
+  description={post.data.excerpt}
+  image={post.data.image}
+  type="article"
+  published={post.data.date}
+  breadcrumbs={[{ name: 'Blog', path: '/blog/' }, { name: post.data.title, path: `/blog/${post.id}/` }]}
+  schema={schema}
+>
+  <article class="wrap page-body">
+    <header class="post-head">
+      <p class="crumbs"><a href="/blog/">Blog</a></p>
+      <time class="meta" datetime={post.data.date.toISOString()}>{date} · {minutes} min read · Rohit Kumar</time>
+      <h1>{post.data.title}</h1>
+    </header>
+    <div class="prose"><Content /></div>
+
+    {relatedServices.length > 0 && (
+      <div class="cta-box">
+        <p>This topic connects to coaching: <a href={`/coaching/${relatedServices[0].slug}/`}>{relatedServices[0].title}</a>{relatedServices[1] && <> and <a href={`/coaching/${relatedServices[1].slug}/`}>{relatedServices[1].title}</a></>}.</p>
+        <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+      </div>
+    )}
+
+    <section class="related">
+      <h2>Keep reading</h2>
+      <ul>
+        {morePosts.map((p) => <li><a href={`/blog/${p.id}/`}>{p.data.title}</a><span>{p.data.excerpt}</span></li>)}
+      </ul>
+    </section>
+
+    <nav class="post-nav" aria-label="More posts">
+      {older ? <a href={`/blog/${older.id}/`}><span class="meta">← Older</span>{older.data.title}</a> : <span />}
+      {newer && <a class="next" href={`/blog/${newer.id}/`}><span class="meta">Newer →</span>{newer.data.title}</a>}
+    </nav>
+  </article>
+</Base>

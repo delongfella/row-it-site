@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { services } from '../data/services';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+const fmt = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<Base
+  title="Life & Career Coach with a Pilot’s Perspective | Rohit Kumar"
+  description="Life and career coaching from Rohit Kumar, an airline pilot-trainer with 24 years in aviation and an ICF-trained coach. Decision-making, clarity and flow."
+  sky
+>
+  <section class="hero wrap">
+    <p class="chip">24 years in aviation · ICF-trained coach</p>
+    <h1>rohit kumar</h1>
+    <p class="tagline">Pilot your life, find your flow</p>
+    <div class="actions">
+      <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+      <a class="btn btn-ghost" href="/about/">About Rohit</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap-wide panel why">
+      <div class="why-text">
+        <h2>Why Row-it?</h2>
+        <p><strong>Rooted in 24 years of aviation experience, Row-it is the coaching platform created by Rohit Kumar, a seasoned pilot and trainer.</strong></p>
+        <p>It’s more than just a platform, it’s a mindset. A way to navigate life with foresight, calm, and confidence. Whether you’re facing a personal challenge or searching for career clarity, Rohit will help you approach it like a trained pilot.</p>
+      </div>
+      <ul class="principles">
+        <li><strong>Discipline</strong><span>Structure that moves you forward.</span></li>
+        <li><strong>Presence</strong><span>Calm, clear thinking under pressure.</span></li>
+        <li><strong>A clear flight plan</strong><span>Next steps you can actually follow.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap-wide">
+      <h2>Coaching Services</h2>
+      <div class="services">
+        {services.map((s) => (
+          <a class="service" href={`/coaching/${s.slug}/`}>
+            <span class="num">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.short}</p>
+            <span class="learn">Learn more →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap-wide">
+      <div class="row-head">
+        <h2>From the blog</h2>
+        <a class="textlink" href="/blog/">All posts</a>
+      </div>
+      <div class="latest">
+        {posts.map((p) => (
+          <a href={`/blog/${p.id}/`}>
+            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.excerpt}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section connect">
+    <div class="wrap panel">
+      <h2>Let’s Connect</h2>
+      <p>Ready to explore your personal flight path? Book a discovery call or coaching session now through Topmate.</p>
+      <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,22 @@
+---
+import { services } from '../data/services';
+const { onLight = false } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class:list={['site-footer', { 'on-light': onLight }]}>
+  <div class="wrap-wide">
+    <nav aria-label="Footer">
+      <a href="/coaching/">Coaching</a>
+      <a href="/about/">About</a>
+      <a href="/blog/">Blog</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://www.linkedin.com/in/rohit-kumar-2108ba54/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://substack.com/@rohit521232" target="_blank" rel="noopener">Substack</a>
+      <a href="/rss.xml">RSS</a>
+    </nav>
+    <ul class="foot-services">
+      {services.map((s) => <li><a href={`/coaching/${s.slug}/`}>{s.title}</a></li>)}
+    </ul>
+    <small>© {year} Rohit Kumar · row-it.in</small>
+  </div>
+</footer>

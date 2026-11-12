@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base
+  title="Blog – Decision-Making, Perception & Flow | Rohit Kumar"
+  description="Essays by pilot and coach Rohit Kumar on decision-making, cognitive bias, perception and living with flow, drawn from 24 years in aviation and coaching."
+  breadcrumbs={[{ name: 'Blog', path: '/blog/' }]}
+>
+  <div class="wrap-wide page-body">
+    <h1 class="page-title">blog</h1>
+    <p class="page-sub">A collection of blogs to inspire, reflect, and enlighten</p>
+    <div class="grid">
+      {posts.map((p) => (
+        <a class="card" href={`/blog/${p.id}/`}>
+          <div class="thumb">
+            {p.data.image ? <img src={p.data.image} alt="" loading="lazy" /> : <span class="script">row-it</span>}
+          </div>
+          <span class="meta">{fmt(p.data.date)}</span>
+          <h2>{p.data.title}</h2>
+          <p>{p.data.excerpt}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

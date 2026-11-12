@@ -1,0 +1,25 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/coaching/', label: 'Coaching' },
+  { href: '/about/', label: 'About' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/contact/', label: 'Contact' },
+];
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+<header class="site-header">
+  <div class="wrap-wide bar">
+    <a class="brand" href="/" aria-label="Rohit Kumar – home">
+      <img src="/images/row.png" alt="" width="44" height="44" />
+      <span>rohit kumar</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" />
+    <label for="nav-toggle" class="menu-btn">Menu</label>
+    <nav class="nav" aria-label="Main">
+      {links.map((l) => <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>)}
+      <a class="btn btn-small" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+    </nav>
+  </div>
+</header>

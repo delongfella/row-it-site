@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Contact & Book a Coaching Session – Rohit Kumar"
+  description="Book a discovery call or coaching session with Rohit Kumar, pilot-trainer and ICF-trained coach, or send a message to get in touch."
+  breadcrumbs={[{ name: 'Contact', path: '/contact/' }]}
+>
+  <div class="wrap page-body">
+    <h1 class="page-title">contact me</h1>
+    <p class="lead">Welcome to a world of limitless possibilities, where the journey is as exhilarating as the destination, and where every moment is an opportunity to make your mark on the canvas of existence. The only limit is the extent of your imagination.</p>
+    <p style="text-align:center;margin-top:1.75rem">
+      <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session here</a>
+    </p>
+    <p class="or">or</p>
+    <h2 style="text-align:center;margin-top:0.5rem">Get in touch</h2>
+
+    <form class="form" name="contact" method="POST" action="/thank-you/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+      <label><span>Name <span class="req">(required)</span></span>
+        <input type="text" name="name" required autocomplete="name" />
+      </label>
+      <label><span>Email <span class="req">(required)</span></span>
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+      <label>Phone
+        <input type="tel" name="phone" autocomplete="tel" />
+      </label>
+      <label>How did you hear about us?
+        <select name="source">
+          <option value="">Select one option</option>
+          <option>Search engine</option>
+          <option>Social media</option>
+          <option>Friend or family</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label>Message
+        <textarea name="message"></textarea>
+      </label>
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+</Base>

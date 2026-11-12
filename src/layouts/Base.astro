@@ -1,0 +1,107 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Crumb { name: string; path: string }
+interface Props {
+  title: string; // full <title>, 50-60 characters ideally
+  description?: string; // 120-160 characters ideally
+  image?: string;
+  sky?: boolean;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  published?: Date;
+  breadcrumbs?: Crumb[];
+  schema?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = 'Life and career coaching by Rohit Kumar, an airline pilot-trainer with 24 years in aviation and an ICF-trained coach. Pilot your life, find your flow.',
+  image = '/images/about-rohit.png',
+  sky = false,
+  type = 'website',
+  noindex = false,
+  published,
+  breadcrumbs = [],
+  schema = [],
+} = Astro.props;
+
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': new URL('/#rohit', site).href,
+    name: 'Rohit Kumar',
+    url: site.href,
+    image: new URL('/images/about-rohit.png', site).href,
+    jobTitle: 'Life and career coach; airline pilot and trainer',
+    description: 'Airline pilot and trainer with 24 years in Indian aviation (Air India, IndiGo) and an ICF-trained (Level 2) life coach.',
+    worksFor: { '@type': 'Organization', name: 'Row-it', url: site.href },
+    sameAs: ['https://www.linkedin.com/in/rohit-kumar-2108ba54/', 'https://topmate.io/rowit', 'https://substack.com/@rohit521232'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Row-it by Rohit Kumar',
+    url: site.href,
+    publisher: { '@id': new URL('/#rohit', site).href },
+  },
+  ...schema,
+];
+if (breadcrumbs.length) {
+  graph.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', path: '/' }, ...breadcrumbs].map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: new URL(c.path, site).href,
+    })),
+  });
+}
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="alternate" type="application/rss+xml" title="Rohit Kumar – Blog" href="/rss.xml" />
+    <meta name="author" content="Rohit Kumar" />
+    {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
+    <meta name="theme-color" content="#3f8fdc" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Row-it by Rohit Kumar" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {published && <meta property="article:author" content="Rohit Kumar" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+  </head>
+  <body class={sky ? 'sky' : ''}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer onLight={!sky} />
+  </body>
+</html>

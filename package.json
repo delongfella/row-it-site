@@ -1,0 +1,20 @@
+{
+  "name": "row-it",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch-images": "node scripts/fetch-images.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.0",
+    "@astrojs/sitemap": "^3.2.0",
+    "@fontsource/albert-sans": "^5.0.0",
+    "@fontsource/beth-ellen": "^5.0.0",
+    "@fontsource/cardo": "^5.0.0",
+    "astro": "^5.0.0"
+  }
+}

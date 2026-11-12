@@ -1,0 +1,127 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# --- Old WordPress URLs -> new URLs (keeps Google rankings and shared links working) ---
+[[redirects]]
+  from = "/about-me"
+  to = "/about/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/contact-us"
+  to = "/contact/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gallery-page-3"
+  to = "/blog/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/feed"
+  to = "/rss.xml"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/author/*"
+  to = "/blog/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/07/02/how-perception-shapes-our-reality"
+  to = "/blog/how-perception-shapes-our-reality/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/06/24/is-desire-a-trap"
+  to = "/blog/is-desire-a-trap/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/book-review-the-checklist-manifesto"
+  to = "/blog/book-review-the-checklist-manifesto/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/fatal-convergence"
+  to = "/blog/fatal-convergence/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/decision-making"
+  to = "/blog/decision-making/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/outcome-bias"
+  to = "/blog/outcome-bias/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/reflections-of-joy"
+  to = "/blog/reflections-of-joy/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/the-anatomy-of-an-iconic-catch"
+  to = "/blog/the-anatomy-of-an-iconic-catch/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/navigating-the-maze-of-success"
+  to = "/blog/navigating-the-maze-of-success/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/when-the-horizon-lied"
+  to = "/blog/when-the-horizon-lied/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/29/when-the-past-comes-knocking"
+  to = "/blog/when-the-past-comes-knocking/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/2025/05/27/88"
+  to = "/blog/why-do-we-repeat-the-same-relationship-with-different-people/"
+  status = 301
+  force = true
+
+# --- Caching and security headers ---
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

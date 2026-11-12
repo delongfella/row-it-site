@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { services } from '../../data/services';
+---
+<Base
+  title="Life & Career Coaching Services – Row-it"
+  description="Coaching for professionals, leaders and students: course correction, flow mapping, decision-making and career clarity, with pilot-trainer Rohit Kumar."
+  breadcrumbs={[{ name: 'Coaching', path: '/coaching/' }]}
+>
+  <div class="wrap-wide page-body">
+    <h1 class="page-title">coaching</h1>
+    <p class="page-sub">Four ways to work with Rohit, each built on the discipline, presence and clear planning of a pilot.</p>
+    <div class="services services-page">
+      {services.map((s) => (
+        <a class="service" href={`/coaching/${s.slug}/`}>
+          <span class="num">{s.n}</span>
+          <h2>{s.title}</h2>
+          <p>{s.short}</p>
+          <span class="learn">Learn more →</span>
+        </a>
+      ))}
+    </div>
+    <div class="cta-box">
+      <p>Not sure which fits? Start with a discovery call.</p>
+      <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+    </div>
+  </div>
+</Base>

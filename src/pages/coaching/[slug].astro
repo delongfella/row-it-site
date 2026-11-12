@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { services } from '../../data/services';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+const all = await getCollection('blog');
+const related = service.related.map((id) => all.find((p) => p.id === id)).filter(Boolean);
+const others = services.filter((s) => s.slug !== service.slug);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title,
+    description: service.metaDescription,
+    serviceType: 'Coaching',
+    url: new URL(`/coaching/${service.slug}/`, Astro.site).href,
+    provider: { '@id': new URL('/#rohit', Astro.site).href },
+  },
+];
+---
+<Base
+  title={service.metaTitle}
+  description={service.metaDescription}
+  breadcrumbs={[{ name: 'Coaching', path: '/coaching/' }, { name: service.title, path: `/coaching/${service.slug}/` }]}
+  schema={schema}
+>
+  <article class="wrap page-body">
+    <p class="crumbs"><a href="/coaching/">Coaching</a> / {service.title}</p>
+    <h1 class="service-h1">{service.h1}</h1>
+    <p class="lead-left">{service.intro}</p>
+
+    <div class="prose">
+      <h2>Who this is for</h2>
+      <ul>{service.forWho.map((x) => <li>{x}</li>)}</ul>
+
+      <h2>What we can work on</h2>
+      <ul>{service.covers.map((x) => <li>{x}</li>)}</ul>
+
+      <h2>A pilot’s lens</h2>
+      <p>{service.lens}</p>
+    </div>
+
+    <div class="cta-box">
+      <p>Ready to explore your personal flight path?</p>
+      <a class="btn" href="https://topmate.io/rowit" target="_blank" rel="noopener">Book a session</a>
+    </div>
+
+    {related.length > 0 && (
+      <section class="related">
+        <h2>Related reading</h2>
+        <ul>
+          {related.map((p) => <li><a href={`/blog/${p!.id}/`}>{p!.data.title}</a><span>{p!.data.excerpt}</span></li>)}
+        </ul>
+      </section>
+    )}
+
+    <section class="related">
+      <h2>Other coaching services</h2>
+      <ul>
+        {others.map((s) => <li><a href={`/coaching/${s.slug}/`}>{s.title}</a><span>{s.short}</span></li>)}
+      </ul>
+    </section>
+  </article>
+</Base>

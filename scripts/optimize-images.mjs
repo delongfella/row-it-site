@@ -15,8 +15,15 @@ try {
 // 1) Sky background -> compact WebP (the CSS uses /images/sky.webp)
 const sky = 'public/images/sky-is-the-limit.png';
 if (existsSync(sky)) {
-  await sharp(sky).resize({ width: 1920, withoutEnlargement: true }).webp({ quality: 72 }).toFile('public/images/sky.webp');
+  await sharp(sky).resize({ width: 2560, withoutEnlargement: true }).webp({ quality: 82 }).toFile('public/images/sky.webp');
   console.log('created public/images/sky.webp');
+}
+
+// 1b) About photo -> 1200px JPEG (the original PNG is several MB)
+const about = 'public/images/about-rohit.png';
+if (existsSync(about)) {
+  await sharp(about).resize({ width: 1200, withoutEnlargement: true }).jpeg({ quality: 82, mozjpeg: true }).toFile('public/images/about-rohit.jpg');
+  console.log('created public/images/about-rohit.jpg');
 }
 
 // 2) Blog images: max 1400px wide, re-compressed in the same format

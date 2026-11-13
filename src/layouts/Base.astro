@@ -19,7 +19,7 @@ interface Props {
 const {
   title,
   description = 'Life and career coaching by Rohit Kumar, an airline pilot-trainer with 24 years in aviation and an ICF-trained coach. Pilot your life, find your flow.',
-  image = '/images/about-rohit.png',
+  image = '/images/about-rohit.jpg',
   sky = false,
   type = 'website',
   noindex = false,
@@ -39,7 +39,7 @@ const graph: Record<string, unknown>[] = [
     '@id': new URL('/#rohit', site).href,
     name: 'Rohit Kumar',
     url: site.href,
-    image: new URL('/images/about-rohit.png', site).href,
+    image: new URL('/images/about-rohit.jpg', site).href,
     jobTitle: 'Life and career coach; airline pilot and trainer',
     description: 'Airline pilot and trainer with 24 years in Indian aviation (Air India, IndiGo) and an ICF-trained (Level 2) life coach.',
     worksFor: { '@type': 'Organization', name: 'Row-it', url: site.href },
